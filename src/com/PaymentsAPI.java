@@ -36,6 +36,8 @@ public class PaymentsAPI extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		
 	}
 
 	/**
@@ -44,7 +46,20 @@ public class PaymentsAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-	}
+		
+			String output = paymentService.insertPayments(request.getParameter("patientName"),
+							request.getParameter("amount"),
+							request.getParameter("paydate"),
+							request.getParameter("address"),
+							request.getParameter("contactNo"),
+							request.getParameter("email"));
+			
+							response.getWriter().write(output);
+
+}
+		
+		
+
 
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest, HttpServletResponse)

@@ -1,6 +1,7 @@
 <%@page import="com.PaymentService"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+		
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
 <script src="Component/jquery-3.5.0.min.js"></script>
 <link href="Veiws/css/bootstrap.min.css" rel="stylesheet">
 <link href="Veiws/css/style.css" rel="stylesheet">
+<script src="Component/payment.js"></script>
 </head>
 <body>
 
@@ -16,9 +18,7 @@
 		<div class="row">
 			<div class="col-6">
 				<h1>Online Payments</h1>
-				<form id="formPayment" name="formPayment">
-					Payment ID: <input id="paymentId" name="paymentId" type="text"
-						class="form-control form-control-sm"> <br>    
+				<form id="formPayment" name="formPayment">   
 						
 						Patient Name: <input id="patientName" name="patientName" type="text"
 						class="form-control form-control-sm"> <br> 
