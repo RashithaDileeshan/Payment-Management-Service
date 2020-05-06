@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Online Payment Service</title>
 <script src="Component/jquery-3.5.0.min.js"></script>
 <link href="Veiws/css/bootstrap.min.css" rel="stylesheet">
 <link href="Veiws/css/style.css" rel="stylesheet">

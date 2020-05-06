@@ -20,7 +20,7 @@ public class PaymentService {
 						return "Error while connecting to the database for inserting.";
 					}
 					// create a prepared statement
-					String query = " insert into payservice (`paymentId`,`patientName`,`amount`,`paydate`,`address`,contactNo,email)"
+					String query = " insert into payservice (`paymentId`,`patientName`,`amount`,`paydate`,`address`,`contactNo`,`email`)"
 							+ " values (?, ?, ?, ?, ?,?,?)";
 					PreparedStatement preparedStmt = con.prepareStatement(query);
 					// binding values
@@ -51,7 +51,7 @@ public class PaymentService {
 			}
 
 			
-		//read all payments
+//read all payments
 			public String readPayments() {
 				String output = "";
 				try {
@@ -60,11 +60,13 @@ public class PaymentService {
 						return "Error while connecting to the database for reading.";
 					}
 					// Prepare the html table to be displayed
-					output = "<table border=\"1\"><tr><th>Payment ID</th><th>Patient Name</th><th>Amount</th><th>Pay"
+					output = "<table border=\"1\"><tr><th>Patient Name</th><th>Amount</th><th>Pay"
 							+ "Date</th><th>Address</th><th>Contact No</th><th>Email</th><th>Update</th><th>Remove</th></tr>";
+					
 					String query = "select * from payservice";
 					Statement stmt = con.createStatement();
 					ResultSet rs = stmt.executeQuery(query);
+					
 					// iterate through the rows in the result set
 					while (rs.next()) {
 						String paymentId = Integer.toString(rs.getInt("paymentId"));
@@ -76,20 +78,22 @@ public class PaymentService {
 						String email = rs.getString("email");
 						
 						// Add into the html table
-						output += "<tr><td><input id=\"hidPaymentIDUpdate\" name=\"hidPaymentIDUpdate\" type=\"hidden\" value=\"" +paymentId+ "\" >"
-								 		 + paymentId + "</td>";
-						output += "<td>" + patientName + "</td>";
+						output += "<tr><td><input id='hidPaymentIDUpdate' name='hidPaymentIDUpdate' type='hidden' value='" + paymentId + "'>" + patientName + "</td>";
 						output += "<td>" + amount + "</td>";
 						output += "<td>" + paydate + "</td>";
 						output += "<td>" + address + "</td>";
 						output += "<td>" + contactNo + "</td>";
 						output += "<td>" + email + "</td>";
+						
 						// buttons
-						output += "<td><input name=\"btnUpdate\" type=\"button\""
-								+ " value=\"Update\" class=\"btn btn-secondary\"></td>"
-								+ "<td><form method=\"post\" action=\"Payment.jsp\">"
-								+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\"" + " class=\"btn btn-danger\">"
-								+ "<input name=\"hidPaymentIDelete\" type=\"hidden\" value=\"" + paymentId + "\">" + "</form></td></tr>";
+//						output += "<td><input name=\"btnUpdate\" type=\"button\""
+//								+ " value=\"Update\" class=\"btn btn-secondary\"></td>"
+//								+ "<td><form method=\"post\" action=\"payment.jsp\">"
+//								+ "<input name=\"btnRemove\" type=\"submit\" value=\"Remove\"" + " class=\"btn btn-danger\">"
+//								+ "<input name=\"hidPaymentIDelete\" type=\"hidden\" value=\"" + paymentId + "\">" + "</form></td></tr>";
+						
+						output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td> "
+								+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger'  data-itemid= '" + paymentId + "'></td></tr>";
 					}
 					con.close();
 					// Complete the html table
@@ -101,91 +105,105 @@ public class PaymentService {
 				return output;
 			}
 			
+//update payment details	
+			public String updatePayment(String paymentId,String patientName, String amount,String paydate, String address,String contactNo,String email) {
+				String output = "";
+				try {
+					Connection con = DBConnection.connect();
+					if (con == null) {
+						return "Error while connecting to the database for updating.";
+					}
+					
+					// create a prepared statement
+					String query = "UPDATE payservice SET patientName=?,amount=?,paydate=?,address=?,contactNo=?,email=? " 
+					+ "WHERE paymentId=?";
+					PreparedStatement preparedStmt = con.prepareStatement(query);
+					// binding values
+					preparedStmt.setString(1, patientName);
+					preparedStmt.setString(2, amount);
+					preparedStmt.setString(3, paydate);
+					preparedStmt.setString(4, address);
+					preparedStmt.setString(5, contactNo);
+					preparedStmt.setString(6, email);
+					preparedStmt.setString(7, paymentId);
+				
+					// execute the statement
+					preparedStmt.execute();
+					con.close();
+					
+					String newPayments = readPayments();
+					 output = "{\"status\":\"success\", \"data\": \"" +
+					 newPayments + "\"}"; 
+					 
+				} catch (Exception e) {
+					output = "{\"status\":\"error\", \"data\":"
+							+ " \"Error while updating the payments.\"}";
+					 System.err.println(e.getMessage()); 
+				}
+				return output;
+			}
+
 			
-		//update payment details	
-//			public String updatePayment(String paymentId,String patientName, float amount,String paydate, String address,String contactNo,String email) {
-//				String output = "";
-//				try {
-//					Connection con = DBConnection.connect();
-//					if (con == null) {
-//						return "Error while connecting to the database for updating.";
-//					}
-//					// create a prepared statement
-//					String query = "UPDATE payservice SET patientName=?,amount=?,paydate=?,address=?,contactNo=?,email=? " 
-//					+ "WHERE paymentId=?";
-//					PreparedStatement preparedStmt = con.prepareStatement(query);
-//					// binding values
-//					preparedStmt.setString(1, patientName);
-//					preparedStmt.setDouble(2, amount);
-//					preparedStmt.setString(3, paydate);
-//					preparedStmt.setString(4, address);
-//					preparedStmt.setString(5, contactNo);
-//					preparedStmt.setString(6, email);
-//					preparedStmt.setString(7,paymentId );
-//					// execute the statement
-//					preparedStmt.execute();
-//					con.close();
-//					output = "Updated successfully";
-//				} catch (Exception e) {
-//					output = "Error while updating the payments details.";
-//					System.err.println(e.getMessage());
-//				}
-//				return output;
-//			}
-//
-//			
-//		//delete payment details	
-//			public String deletepayment(String paymentId) {
-//				String output = "";
-//				try {
-//					Connection con = DBConnection.connect();
-//					if (con == null) {
-//						return "Error while connecting to the database for deleting.";
-//					}
-//					// create a prepared statement
-//					String query = "delete from payservice where paymentId = ?";
-//					PreparedStatement preparedStmt = con.prepareStatement(query);
-//					// binding values
-//					preparedStmt.setInt(1, Integer.parseInt(paymentId));
-//					// execute the statement
-//					preparedStmt.execute();
-//					con.close();
-//					output = "Deleted successfully";
-//				} catch (Exception e) {
-//					output = "Error while deleting the payment details.";
-//					System.err.println(e.getMessage());
-//				}
-//				return output;
-//			}
-//
-//			
-////			Display single payment detail
-//			public static Payments getPaymentDetails(String id) {
-//				Payments payment = null;
-//				try {
-//
-//					Connection con = DBConnection.connect();
-//
-//					String getSql = "SELECT * FROM payservice WHERE paymentId = ? ";
-//
-//					PreparedStatement ps_getPaymentDetails = con.prepareStatement(getSql);
-//					ps_getPaymentDetails.setInt(1, Integer.parseInt(id));
-//
-//					ResultSet rs = ps_getPaymentDetails.executeQuery();
-//
-//					while (rs.next()) {
-//
-//						
-//						payment = new Payments(Integer.parseInt(id), rs.getString(2), rs.getLong(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
-//					
-//					}
-//
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//
-//				return payment;
-//			}
-//			
+//delete payment details	
+			public String deletepayment(String paymentId) {
+				String output = "";
+				try {
+					Connection con = DBConnection.connect();
+					if (con == null) {
+						return "Error while connecting to the database for deleting.";
+					}
+					// create a prepared statement
+					String query = "delete from payservice where paymentId = ?";
+					PreparedStatement preparedStmt = con.prepareStatement(query);
+					// binding values
+					
+					preparedStmt.setInt(1, Integer.parseInt(paymentId));
+					
+					// execute the statement
+					preparedStmt.execute();
+					con.close();
+					
+					String newPayments = readPayments();
+					output = "{\"status\":\"success\", \"data\": \"" +
+					newPayments + "\"}";
+					}
+					catch (Exception e)
+					{
+						output = "{\"status\":\"error\", \"data\":	"
+								+ "\"Error while deleting the payments.\"}";
+					 System.err.println(e.getMessage());
+					 }
+					 return output; 
+			}
+
+			
+//Display single payment detail
+			public static Payments getPaymentDetails(String id) {
+				Payments payment = null;
+				try {
+
+					Connection con = DBConnection.connect();
+
+					String getSql = "SELECT * FROM payservice WHERE paymentId = ? ";
+
+					PreparedStatement ps_getPaymentDetails = con.prepareStatement(getSql);
+					ps_getPaymentDetails.setInt(1, Integer.parseInt(id));
+
+					ResultSet rs = ps_getPaymentDetails.executeQuery();
+
+					while (rs.next()) {
+
+						
+						payment = new Payments(rs.getInt(Integer.parseInt(id)), rs.getString(2), rs.getLong(3), rs.getDate(4), rs.getString(5), rs.getString(6), rs.getString(7));
+					
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				return payment;
+			}
+			
 			
 }
