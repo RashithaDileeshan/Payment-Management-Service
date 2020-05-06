@@ -37,38 +37,31 @@ function onPaymentSaveComplete(response, status) {
 	if (status == "success") {
 		
 		var resultSet = JSON.parse(response);
-		
-		if (resultSet.status.trim() == "success") 
-		{
-			
+	
+		if (resultSet.status.trim() == "success") {
 			$("#alertSuccess").text("Successfully saved.");
 			$("#alertSuccess").show();
 			$("#divPaymentsGrid").html(resultSet.data);
 		
 		} 
 		else if (resultSet.status.trim() == "error") {
-			
 			$("#alertError").text(resultSet.data);
 			$("#alertError").show();
-		
 		}
-	} 
-	else if (status == "error") {
+		}   
 		
+		else if (status == "error") {
 		$("#alertError").text("Error while saving.");
 		$("#alertError").show();
-	
-	} 
-	else {
+		} 
 		
+		else {
 		$("#alertError").text("Unknown error while saving..");
 		$("#alertError").show();
-	
-	}
-	
-	$("#hidPaymentIdSave").val("");
-	$("#formPayment")[0].reset();
-
+		}
+		
+		$("#hidPaymentIdSave").val("");
+		$("#formPatient")[0].reset();
 }
 
 // CLIENT-MODEL================================================================

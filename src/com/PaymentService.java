@@ -1,10 +1,10 @@
 package com;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 import database.DBConnection;
 import model.Payments;
@@ -19,15 +19,21 @@ public class PaymentService {
 					if (con == null) {
 						return "Error while connecting to the database for inserting.";
 					}
+					
 					// create a prepared statement
 					String query = " insert into payservice (`paymentId`,`patientName`,`amount`,`paydate`,`address`,`contactNo`,`email`)"
 							+ " values (?, ?, ?, ?, ?,?,?)";
+					
 					PreparedStatement preparedStmt = con.prepareStatement(query);
+					
 					// binding values
 					preparedStmt.setInt(1, 0);
 					preparedStmt.setString(2, patientName);
 					preparedStmt.setString(3, amount);
-					preparedStmt.setString(4, paydate);
+					SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
+					java.util.Date date1 = sdf1.parse(paydate);
+					java.sql.Date sqlStartDate = new java.sql.Date(date1.getTime());
+					preparedStmt.setDate(4, sqlStartDate);
 					preparedStmt.setString(5, address);
 					preparedStmt.setString(6, contactNo);
 					preparedStmt.setString(7, email);
@@ -35,13 +41,15 @@ public class PaymentService {
 					// execute the statement
 					preparedStmt.execute();
 					con.close();
-					output = "Inserted successfully";
 					
-					String newPayments = readPayments();
-					 output = "{\"status\":\"success\", \"data\": \"" +
-					 newPayments + "\"}"; 
+					//Create JSON Object to show successful msg
+					String newPayment = readPayments();
+					output = "{\"status\":\"success\", \"data\": \"" + newPayment + "\"}"; 
+				
 					 
 				} catch (Exception e) {
+					
+					//Create JSON Object to show Error msg.
 					output = "{\"status\":\"error\", \"data\": "
 							+ "\"Error while inserting the Payment.\"}"; 
 					output = "Error while inserting the payment Details.";	
@@ -72,7 +80,7 @@ public class PaymentService {
 						String paymentId = Integer.toString(rs.getInt("paymentId"));
 						String patientName = rs.getString("patientName");
 						String amount = Long.toString(rs.getLong("amount"));
-						Date paydate = rs.getDate("paydate");
+						String paydate = rs.getString("paydate");
 						String address = rs.getString("address");
 						String contactNo = rs.getString("contactNo");
 						String email = rs.getString("email");
@@ -96,6 +104,7 @@ public class PaymentService {
 								+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger'  data-itemid= '" + paymentId + "'></td></tr>";
 					}
 					con.close();
+					
 					// Complete the html table
 					output += "</table>";
 				} catch (Exception e) {
@@ -107,17 +116,23 @@ public class PaymentService {
 			
 //update payment details	
 			public String updatePayment(String paymentId,String patientName, String amount,String paydate, String address,String contactNo,String email) {
+				
 				String output = "";
+				
 				try {
+					
 					Connection con = DBConnection.connect();
 					if (con == null) {
 						return "Error while connecting to the database for updating.";
 					}
 					
+					
 					// create a prepared statement
 					String query = "UPDATE payservice SET patientName=?,amount=?,paydate=?,address=?,contactNo=?,email=? " 
 					+ "WHERE paymentId=?";
+					
 					PreparedStatement preparedStmt = con.prepareStatement(query);
+					
 					// binding values
 					preparedStmt.setString(1, patientName);
 					preparedStmt.setString(2, amount);
@@ -127,18 +142,25 @@ public class PaymentService {
 					preparedStmt.setString(6, email);
 					preparedStmt.setString(7, paymentId);
 				
+					
 					// execute the statement
+					
 					preparedStmt.execute();
 					con.close();
 					
 					String newPayments = readPayments();
-					 output = "{\"status\":\"success\", \"data\": \"" +
-					 newPayments + "\"}"; 
+					
+					output = "{\"status\":\"success\", \"data\": \"" +
+					newPayments + "\"}"; 
+					
+					//output = "Updated successfully";
 					 
 				} catch (Exception e) {
+					
 					output = "{\"status\":\"error\", \"data\":"
 							+ " \"Error while updating the payments.\"}";
-					 System.err.println(e.getMessage()); 
+					
+					System.err.println(e.getMessage()); 
 				}
 				return output;
 			}

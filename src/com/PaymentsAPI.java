@@ -1,8 +1,6 @@
 package com;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,9 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sun.jersey.spi.dispatch.RequestDispatcher;
 
-import model.Payments;
 
 /**
  * Servlet implementation class PaymentsAPI
@@ -40,7 +36,6 @@ public class PaymentsAPI extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 		
-		
 	}
 
 	/**
@@ -52,7 +47,7 @@ public class PaymentsAPI extends HttpServlet {
 		
 			String output = paymentService.insertPayments(request.getParameter("patientName"),
 							request.getParameter("amount"),
-							request.getParameter("paydate"),
+							request.getParameter("paymentdate"),
 							request.getParameter("address"),
 							request.getParameter("contactNo"),
 							request.getParameter("email"));
@@ -62,26 +57,31 @@ public class PaymentsAPI extends HttpServlet {
 }
 	
 	//Convert request parameter to a map
-		private static Map getParasMap(HttpServletRequest request)
-		{
-		 Map<String, String> map = new HashMap<String, String>();
+	private static Map getParasMap(HttpServletRequest request)
+	{
+		
+		Map<String, String> map = new HashMap<String, String>();
+	
 		try
 		 {
 			Scanner scanner = new Scanner(request.getInputStream(), "UTF-8");
 			String queryString = scanner.hasNext() ?
-			scanner.useDelimiter("\\A").next() : "";
-		    scanner.close();
-		    String[] params = queryString.split("&");
-		 for (String param : params)
-		 { 
-			 String[] p = param.split("=");
-			 map.put(p[0], p[1]);
-		  	}
-			}
-			catch (Exception e)
-			{
-			}
-			return map;
+		 
+					scanner.useDelimiter("\\A").next() : "";
+					scanner.close();
+		 
+					String[] params = queryString.split("&");
+						for (String param : params)
+						{ 
+		
+							String[] p = param.split("=");
+							map.put(p[0], p[1]);
+						}
+		 }
+		catch (Exception e)
+		 {
+		 }
+		return map;
 		}
 
 		
@@ -90,15 +90,16 @@ public class PaymentsAPI extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Map<String, String> param = getParasMap(request);
+		Map paras = getParasMap(request);	
 		
-		String output = paymentService.updatePayment(param.get("hidPaymentIdSave").toString(),
-				param.get("patientName").toString().replace("+", ""),
-				param.get("amount").toString(),
-				param.get("paydate").toString(),
-				param.get("address").toString().replace("+", ""),
-				param.get("contactNo").toString(),
-				param.get("email").toString().replace("%40", "@"));
+		
+		String output = paymentService.updatePayment(paras.get("hidPaymentIdSave").toString(),
+				paras.get("patientName").toString().replace("+", " "),
+				paras.get("amount").toString(),
+				paras.get("paymentdate").toString(),
+				paras.get("address").toString().replace("+", " "),
+				paras.get("contactNo").toString(),
+				paras.get("email").toString().replace("%40", "@"));
 				
 				response.getWriter().write(output);
 }

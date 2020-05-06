@@ -1,3 +1,5 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="com.PaymentService"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -13,18 +15,25 @@
 <script src="Component/payment.js"></script>
 </head>
 <body>
-
-	<div class="container">
+	 
+<div class="container">
 		<div class="row">
 			<div class="col-6">
-				<h1>Online Payments</h1>
+				<h1><center>Online Payments</center></h1>
+				
+				<%
+         			Date dNow = new Date( );
+         			SimpleDateFormat ft = new SimpleDateFormat ("E yyyy.MM.dd 'at' hh:mm:ss");
+         			out.print( "<h2 align=\"center\">" + ft.format(dNow) + "</h2>");
+      			%>
+				
 				<form id="formPayment" name="formPayment">   
 						
 						Patient Name: <input id="patientName" name="patientName" type="text"
 						class="form-control form-control-sm"> <br> 
 						
 						Amount: <input id="amount" name="amount" type="text"
-						class="form-control form-control-sm"> <br> 
+						class="form-control form-control-sm"> <br> 	
 						
 						Payment Date: <input id="paymentdate" name="paymentdate" type="date"
 						class="form-control form-control-sm"> <br> 
