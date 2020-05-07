@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 
+import com.google.gson.JsonObject;
+
 import database.DBConnection;
 import model.Payments;
 
@@ -44,8 +46,10 @@ public class PaymentService {
 					
 					//Create JSON Object to show successful msg
 					String newPayments = readPayments();
-					output = "{\"status\":\"success\", \"data\": \"" +
-					newPayments + "\"}";  
+					JsonObject jsonObject = new JsonObject();
+					jsonObject.addProperty("status", "success");
+					jsonObject.addProperty("data", newPayments);
+					output =  jsonObject.toString();   
 				
 					 
 				} catch (Exception e) {
@@ -150,7 +154,10 @@ public class PaymentService {
 					con.close();
 					
 					String newPayments = readPayments();
-					output = "{\"status\":\"success\", \"data\": \"" + newPayments + "\"}"; 
+					JsonObject jsonObject = new JsonObject();
+					jsonObject.addProperty("status", "success");
+					jsonObject.addProperty("data", newPayments);
+					output =  jsonObject.toString();  
 					
 					//output = "Updated successfully";
 					 
@@ -185,8 +192,10 @@ public class PaymentService {
 					con.close();
 					
 					String newPayments = readPayments();
-					output = "{\"status\":\"success\", \"data\": \"" + 
-					newPayments + "\"}";
+					JsonObject jsonObject = new JsonObject();
+					jsonObject.addProperty("status", "success");
+					jsonObject.addProperty("data", newPayments);
+					output =  jsonObject.toString(); 
 					}
 					catch (Exception e)
 					{
