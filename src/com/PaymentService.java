@@ -30,7 +30,7 @@ public class PaymentService {
 					preparedStmt.setInt(1, 0);
 					preparedStmt.setString(2, patientName);
 					preparedStmt.setString(3, amount);
-					SimpleDateFormat sdf1 = new SimpleDateFormat("dd-mm-yyyy");
+					SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-mm-dd");
 					java.util.Date date1 = sdf1.parse(paydate);
 					java.sql.Date sqlStartDate = new java.sql.Date(date1.getTime());
 					preparedStmt.setDate(4, sqlStartDate);
