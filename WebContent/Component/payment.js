@@ -14,6 +14,7 @@ $(document).on("click", "#btnSave", function(event) {
 
 	// Form validation-------------------
 	var status = validatePaymentForm();
+	
 	if (status != true) {
 		$("#alertError").text(status);
 		$("#alertError").show();
@@ -28,7 +29,7 @@ $(document).on("click", "#btnSave", function(event) {
 		data : $("#formPayment").serialize(),
 		dataType : "text",
 		complete : function(response, status) {
-			onPatientSaveComplete(response.responseText, status);
+			onPaymentSaveComplete(response.responseText, status);
 		}
 	});
 });
@@ -48,23 +49,22 @@ function onPaymentSaveComplete(response, status) {
 			$("#alertError").text(resultSet.data);
 			$("#alertError").show();
 		}
-		}   
-		
+	}
 		else if (status == "error") {
-		$("#alertError").text("Error while saving.");
-		$("#alertError").show();
+			$("#alertError").text("Error while saving.");
+			$("#alertError").show();
 		} 
 		
 		else {
-		$("#alertError").text("Unknown error while saving..");
-		$("#alertError").show();
+			$("#alertError").text("Unknown error while saving..");
+			$("#alertError").show();
 		}
 		
 		$("#hidPaymentIdSave").val("");
-		$("#formPatient")[0].reset();
+		$("#formPayment")[0].reset();
 }
 
-// CLIENT-MODEL================================================================
+//CLIENT-MODEL=============================================
 function validatePaymentForm() {
 	//Patient Name 
 	if ($("#patientName").val().trim() == "") {
@@ -89,6 +89,11 @@ function validatePaymentForm() {
 		return "Insert Contact Number.";
 	}
 	
+	var tmpcontactNo = $("#contactNo").val().trim();
+	if (!$.isNumeric(tmpcontactNo)) {
+		return "Insert a numerical value for contact no.";
+	}
+	
 	// email
 	if ($("#email").val().trim() == "") {
 		return "Insert Email.";
@@ -97,6 +102,7 @@ function validatePaymentForm() {
 
 	return true;
 }
+
 
 //Update
 $(document).on("click", ".btnUpdate", function(event)
@@ -161,7 +167,7 @@ $(document).on("click", ".btnRemove", function(event)
 	}
 }
 
-
+	
 
 
 	

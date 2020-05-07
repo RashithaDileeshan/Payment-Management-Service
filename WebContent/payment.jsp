@@ -9,9 +9,9 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Online Payment Service</title>
-<script src="Component/jquery-3.5.0.min.js"></script>
 <link href="Veiws/css/bootstrap.min.css" rel="stylesheet">
 <link href="Veiws/css/style.css" rel="stylesheet">
+<script src="Component/jquery-3.5.0.min.js"></script>
 <script src="Component/payment.js"></script>
 </head>
 <body>
@@ -19,15 +19,10 @@
 <div class="container">
 		<div class="row">
 			<div class="col-6">
-				<h1><center>Online Payments</center></h1>
-				
-				<%
-         			Date dNow = new Date( );
-         			SimpleDateFormat ft = new SimpleDateFormat ("E yyyy.MM.dd 'at' hh:mm:ss");
-         			out.print( "<h2 align=\"center\">" + ft.format(dNow) + "</h2>");
-      			%>
 				
 				<form id="formPayment" name="formPayment">   
+				
+				<h1><center>Online Payments</center></h1>
 						
 						Patient Name: <input id="patientName" name="patientName" type="text"
 						class="form-control form-control-sm"> <br> 

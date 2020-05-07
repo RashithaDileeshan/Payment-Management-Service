@@ -43,17 +43,18 @@ public class PaymentService {
 					con.close();
 					
 					//Create JSON Object to show successful msg
-					String newPayment = readPayments();
-					output = "{\"status\":\"success\", \"data\": \"" + newPayment + "\"}"; 
+					String newPayments = readPayments();
+					output = "{\"status\":\"success\", \"data\": \"" +
+					newPayments + "\"}";  
 				
 					 
 				} catch (Exception e) {
 					
 					//Create JSON Object to show Error msg.
 					output = "{\"status\":\"error\", \"data\": "
-							+ "\"Error while inserting the Payment.\"}"; 
-					output = "Error while inserting the payment Details.";	
+							+ "\"Error while inserting the Payment.\"}"; 	
 					System.err.println(e.getMessage());
+				
 				}
 				return output;
 			}
@@ -149,9 +150,7 @@ public class PaymentService {
 					con.close();
 					
 					String newPayments = readPayments();
-					
-					output = "{\"status\":\"success\", \"data\": \"" +
-					newPayments + "\"}"; 
+					output = "{\"status\":\"success\", \"data\": \"" + newPayments + "\"}"; 
 					
 					//output = "Updated successfully";
 					 
@@ -186,7 +185,7 @@ public class PaymentService {
 					con.close();
 					
 					String newPayments = readPayments();
-					output = "{\"status\":\"success\", \"data\": \"" +
+					output = "{\"status\":\"success\", \"data\": \"" + 
 					newPayments + "\"}";
 					}
 					catch (Exception e)
